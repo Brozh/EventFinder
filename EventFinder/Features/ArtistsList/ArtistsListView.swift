@@ -1,83 +1,90 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct ArtistsListFeature: Reducer {
-  struct State: Equatable {
-    var artists: IdentifiedArrayOf<Artist> = []
-  }
-
-  enum Action {
-    case viewDidAppear
-    case artistsDidLoad([Artist])
-  }
-
-  @Dependency(\.repository) var repository
-
-  func reduce(into state: inout State, action: Action) -> Effect<Action> {
-    switch action {
-    case .viewDidAppear:
-      return .run { send in
-        try await send(.artistsDidLoad(repository.getArtists()))
-      }
-    case let .artistsDidLoad(artists):
-      state.artists = .init(uncheckedUniqueElements: artists.sorted(by: { $0.name > $1.name }))
-      return .none
-    }
-  }
-}
-
 struct ArtistsListView: View {
   let store: StoreOf<ArtistsListFeature>
 
   var body: some View {
     WithViewStore(store, observe: { $0 }) { viewStore in
-      ScrollView(.vertical, showsIndicators: false) {
-        VStack{
-          ForEach(viewStore.artists) { artist in
-            ArtistCard(artist: artist)
-          }
+      NavigationStackStore(store.scope(state: \.path, action: { .path($0) })) {
+        ListView(store: store)
+          .redacted(reason: viewStore.isLoading ? .placeholder : [])
+      } destination: { state in
+        switch state {
+        case .detail:
+          CaseLet(
+            /ArtistsListFeature.Path.State.detail,
+             action: ArtistsListFeature.Path.Action.detail,
+             then: ArtistDetailView.init(store:)
+          )
         }
       }
       .navigationTitle("Artists")
-      .task {
-        await viewStore.send(.viewDidAppear).finish()
+    }
+  }
+}
+
+private struct ListView: View {
+  let store: StoreOf<ArtistsListFeature>
+
+  var body: some View {
+    WithViewStore(store, observe: { $0 }) { viewStore in
+      ScrollView {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible())], spacing: 8) {
+          ForEach(viewStore.state.artists) { artist in
+            if viewStore.isLoading {
+              ArtistCard(artist: artist, isLoading: viewStore.isLoading)
+            } else {
+              NavigationLink(state: ArtistsListFeature.Path.State.detail(ArtistDetailFeature.State(artist: artist))) {
+                ArtistCard(artist: artist, isLoading: viewStore.isLoading)
+              }
+            }
+          }
+        }
+        .padding(.horizontal, 16)
       }
+      .onAppear { viewStore.send(.onAppear) }
     }
   }
 }
 
 private struct ArtistCard: View {
   let artist: Artist
+  let isLoading: Bool
 
   var body: some View {
     ZStack(alignment: .topLeading) {
-      Image(uiImage: UIImage())
-        .resizable()
-        .background(.gray)
-        .aspectRatio(contentMode: .fill)
-        .frame(maxWidth: .infinity)
-        .frame(maxHeight: 250)
+      AsyncImage(url: artist.imageUrl) { image in
+        image
+          .resizable()
+          .background(.gray)
+      } placeholder: {
+        Rectangle().fill(.gray)
+      }
+      .aspectRatio(contentMode: .fill)
+      .frame(maxWidth: .infinity)
+      .frame(maxHeight: 250)
 
       HStack {
         Spacer()
         Text(artist.genre)
           .font(.subheadline)
           .foregroundColor(.white)
+          .shimmering(active: isLoading)
           .padding(10)
           .background(.ultraThinMaterial)
-          .cornerRadius(10)
-          .padding(.trailing, 20)
-          .padding(.top, 20)
+          .clipShape(RoundedCorner(radius: 8, corners: .bottomLeft))
       }
 
       VStack(alignment: .leading) {
         Spacer()
-
         HStack{
           Text(artist.name)
             .font(.title3)
             .bold()
+            .multilineTextAlignment(.leading)
             .foregroundColor(.white)
+            .shimmering(active: isLoading)
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
           Spacer()
@@ -86,20 +93,46 @@ private struct ArtistCard: View {
         .background(.ultraThinMaterial)
       }
     }
-    .cornerRadius(10)
-    .padding()
+    .cornerRadius(8)
   }
 }
 
-#Preview {
+struct RoundedCorner: Shape {
+  var radius: CGFloat
+  var corners: UIRectCorner
+
+  func path(in rect: CGRect) -> Path {
+    let path = UIBezierPath(
+      roundedRect: rect,
+      byRoundingCorners: corners,
+      cornerRadii: CGSize(width: radius, height: radius)
+    )
+    return Path(path.cgPath)
+  }
+}
+
+#Preview("Loading 10 sec then fail") {
   NavigationStack {
     ArtistsListView(
       store: Store(
-        initialState: .init(
-          artists: [
-            .init(id: 1, name: "Sample Artist", genre: "New genre")
-          ]
-        ),
+        initialState: .init(),
+        reducer: ArtistsListFeature.init,
+        withDependencies: {
+          $0.repository.getArtists = {
+            try await Task.sleep(nanoseconds: NSEC_PER_SEC * 10)
+            throw URLError(.badURL)
+          }
+        }
+      )
+    )
+  }
+}
+
+#Preview("Live") {
+  NavigationStack {
+    ArtistsListView(
+      store: Store(
+        initialState: .init(),
         reducer: ArtistsListFeature.init
       )
     )

@@ -37,6 +37,11 @@ struct HomeView: View {
         ArtistsListView(store: .init(initialState: .init()) {
           ArtistsListFeature()
             ._printChanges()
+        } withDependencies: { dependencies in
+          dependencies.repository.getArtists = { [dependencies] in
+            try await Task.sleep(nanoseconds: NSEC_PER_SEC * 10)
+            return try await dependencies.repository.getArtists()
+          }
         })
       }
       .tabItem { Label("Artists", systemImage: "figure.wave") }
