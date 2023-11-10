@@ -8,7 +8,16 @@ struct DecodableArtist: Decodable {
 }
 
 extension DecodableArtist {
-  func asArtist(with imageBaseUrl: URL) -> Artist {
+  struct Performance: Decodable {
+    let id: Artist.Performance.ID
+    let date: Date
+    let artistId: Artist.ID
+    let venue: DecodableVenue
+  }
+}
+
+extension DecodableArtist {
+  func asArtist(imageBaseUrl: URL) -> Artist {
     .init(
       id: id,
       name: name,
@@ -16,6 +25,16 @@ extension DecodableArtist {
       imageUrl: imageBaseUrl
         .appending(path: "artists")
         .appending(path: name.replacingOccurrences(of: " ", with: "+") + ".png")
+    )
+  }
+}
+
+extension DecodableArtist.Performance {
+  func asPerformance(imageBaseUrl: URL) -> Artist.Performance {
+    .init(
+      id: id,
+      date: date,
+      venue: venue.asVenue(imageBaseUrl: imageBaseUrl)
     )
   }
 }

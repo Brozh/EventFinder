@@ -1,38 +1,38 @@
-import Tagged
 import Foundation
+import Tagged
 
-struct Artist: Identifiable, Equatable {
-  let id: Tagged<Self, Int>
+struct Venue: Identifiable, Equatable {
+  let id: Tagged<Venue, Int>
   let name: String
-  let genre: String
+  let sortId: Int
   let imageUrl: URL?
 }
 
-extension Artist {
+extension Venue {
   struct Performance: Identifiable, Equatable {
     let id: Tagged<Self, Int>
     let date: Date
-    let venue: Venue
+    let artist: Artist
   }
 }
 
-extension Artist {
+extension Venue {
   static func placeholder(id: Int = 1) -> Self {
     .init(
       id: .init(id),
-      name: String(repeating: " ", count: .random(in: 10...20)),
-      genre: String(repeating: " ", count: .random(in: 3...10)),
+      name: String(repeating: " ", count: .random(in: 10...50)),
+      sortId: .random(in: 0...100),
       imageUrl: nil
     )
   }
 }
 
-extension Artist.Performance {
+extension Venue.Performance {
   static func placeholder(id: Int = 1) -> Self {
     .init(
       id: .init(id),
       date: Date(),
-      venue: .placeholder()
+      artist: .placeholder()
     )
   }
 }

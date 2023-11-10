@@ -111,17 +111,14 @@ struct RoundedCorner: Shape {
   }
 }
 
-#Preview("Loading 10 sec then fail") {
+#Preview("Load 10 sec then fail") {
   NavigationStack {
     ArtistsListView(
       store: Store(
         initialState: .init(),
         reducer: ArtistsListFeature.init,
         withDependencies: {
-          $0.repository.getArtists = {
-            try await Task.sleep(nanoseconds: NSEC_PER_SEC * 10)
-            throw URLError(.badURL)
-          }
+          $0.repository = .waitThenFail()
         }
       )
     )
