@@ -20,8 +20,8 @@ extension Artist {
   static func placeholder(id: Int = 1) -> Self {
     .init(
       id: .init(id),
-      name: String(repeating: " ", count: .random(in: 10...20)),
-      genre: String(repeating: " ", count: .random(in: 3...10)),
+      name: String(repeating: " ", count: 8 * (1 + (id % 3))),
+      genre: String(repeating: " ", count: 3 * (1 + (id % 3))),
       imageUrl: nil
     )
   }
@@ -32,7 +32,7 @@ extension Artist.Performance {
     .init(
       id: .init(id),
       date: Date(),
-      venue: .placeholder()
+      venue: .placeholder(id: id)
     )
   }
 }

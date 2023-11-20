@@ -1,5 +1,5 @@
 import Foundation
-import ComposableArchitecture
+import Dependencies
 
 extension Repository: DependencyKey {
   static var liveValue: Self {
@@ -8,16 +8,9 @@ extension Repository: DependencyKey {
     return .init(
       getArtists: liveRepository.getArtists,
       getVenues: liveRepository.getVenues,
-      getArtistPerformances: liveRepository.getArtistPerformances(for:),
-      getVenuePerformances: liveRepository.getVenuePerformances(for:)
+      getArtistPerformances: liveRepository.getArtistPerformances(for:from:to:),
+      getVenuePerformances: liveRepository.getVenuePerformances(for:from:to:)
     )
-  }
-}
-
-extension DependencyValues {
-  var repository: Repository {
-    get { self[Repository.self] }
-    set { self[Repository.self] = newValue }
   }
 }
 
@@ -43,9 +36,11 @@ private struct LiveRepository {
   }
 
   @Sendable
-  func getArtistPerformances(for artistId: Artist.ID) async throws -> [Artist.Performance] {
+  func getArtistPerformances(for artistId: Artist.ID, from: Date, to: Date) async throws -> [Artist.Performance] {
     guard
-      let url = baseUrl?.appending(path: "artists").appending(path: "\(artistId)").appending(path: "performances"),
+      let url = baseUrl?
+        .appending(components: "artists", "\(artistId)", "performances")
+        .appending(queryItems: [from.queryItem("from"), to.queryItem("to")]),
       let imageBaseUrl
     else { throw URLError(.badURL) }
     let (data, _) = try await URLSession.shared.data(from: url)
@@ -62,13 +57,28 @@ private struct LiveRepository {
   }
 
   @Sendable
-  func getVenuePerformances(for venueId: Venue.ID) async throws -> [Venue.Performance] {
+  func getVenuePerformances(for venueId: Venue.ID, from: Date, to: Date) async throws -> [Venue.Performance] {
     guard
-      let url = baseUrl?.appending(path: "venues").appending(path: "\(venueId)").appending(path: "performances"),
+      let url = baseUrl?
+        .appending(components: "venues", "\(venueId)", "performances")
+        .appending(queryItems: [from.queryItem("from"), to.queryItem("to")]),
       let imageBaseUrl
     else { throw URLError(.badURL) }
     let (data, _) = try await URLSession.shared.data(from: url)
     let decodedPerformances = try decoder.decode([DecodableVenue.Performance].self, from: data)
     return decodedPerformances.map { $0.asPerformance(imageBaseUrl: imageBaseUrl) }
+  }
+}
+
+// MARK: - Date+URLQueryItem
+private extension Date {
+  static let formatter = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    return dateFormatter
+  }()
+
+  func queryItem(_ name: String) -> URLQueryItem {
+    .init(name: name, value: Self.formatter.string(from: self))
   }
 }

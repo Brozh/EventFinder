@@ -39,8 +39,12 @@ struct HomeView: View {
             ._printChanges()
         } withDependencies: { dependencies in
           dependencies.repository.getArtists = { [dependencies] in
-            try await Task.sleep(nanoseconds: NSEC_PER_SEC * 10)
+            try await Task.sleep(nanoseconds: NSEC_PER_SEC * 2)
             return try await dependencies.repository.getArtists()
+          }
+          dependencies.repository.getArtistPerformances = { [dependencies] artistId, from, to in
+            try await Task.sleep(nanoseconds: NSEC_PER_SEC * 2)
+            return try await dependencies.repository.getArtistPerformances(artistId, from, to)
           }
         })
       }

@@ -20,7 +20,7 @@ extension Venue {
   static func placeholder(id: Int = 1) -> Self {
     .init(
       id: .init(id),
-      name: String(repeating: " ", count: .random(in: 10...50)),
+      name: String(repeating: " ", count: 15 * (1 + (id % 3))),
       sortId: .random(in: 0...100),
       imageUrl: nil
     )

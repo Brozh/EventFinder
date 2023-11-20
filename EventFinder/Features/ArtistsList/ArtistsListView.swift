@@ -2,7 +2,8 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ArtistsListView: View {
-  let store: StoreOf<ArtistsListFeature>
+//  let store: StoreOf<ArtistsListFeature>
+  let store: Store<ArtistsListFeature.State, ArtistsListFeature.Action>
 
   var body: some View {
     WithViewStore(store, observe: { $0 }) { viewStore in
@@ -57,9 +58,9 @@ private struct ArtistCard: View {
       AsyncImage(url: artist.imageUrl) { image in
         image
           .resizable()
-          .background(.gray)
+          .background(Color(white: 0.70))
       } placeholder: {
-        Rectangle().fill(.gray)
+        Rectangle().fill(Color(white: 0.70))
       }
       .aspectRatio(contentMode: .fill)
       .frame(maxWidth: .infinity)
@@ -70,7 +71,7 @@ private struct ArtistCard: View {
         Text(artist.genre)
           .font(.subheadline)
           .foregroundColor(.white)
-          .shimmering(active: isLoading)
+          .shimmering(active: isLoading, opacity: 0.2)
           .padding(10)
           .background(.ultraThinMaterial)
           .clipShape(RoundedCorner(radius: 8, corners: .bottomLeft))
@@ -84,7 +85,7 @@ private struct ArtistCard: View {
             .bold()
             .multilineTextAlignment(.leading)
             .foregroundColor(.white)
-            .shimmering(active: isLoading)
+            .shimmering(active: isLoading, opacity: 0.2)
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
           Spacer()
@@ -111,14 +112,14 @@ struct RoundedCorner: Shape {
   }
 }
 
-#Preview("Load 10 sec then fail") {
+#Preview("Loading") {
   NavigationStack {
     ArtistsListView(
       store: Store(
         initialState: .init(),
         reducer: ArtistsListFeature.init,
         withDependencies: {
-          $0.repository = .waitThenFail()
+          $0.repository = .waitForever()
         }
       )
     )
@@ -130,7 +131,10 @@ struct RoundedCorner: Shape {
     ArtistsListView(
       store: Store(
         initialState: .init(),
-        reducer: ArtistsListFeature.init
+        reducer: ArtistsListFeature.init,
+        withDependencies: {
+          $0.repository = .liveValue
+        }
       )
     )
   }

@@ -7,7 +7,7 @@ struct ArtistsListFeature: Reducer {
     var isLoading = false
   }
 
-  enum Action {
+  enum Action: Equatable {
     case path(StackAction<Path.State, Path.Action>)
     case onAppear
     case artistsDidLoad([Artist])

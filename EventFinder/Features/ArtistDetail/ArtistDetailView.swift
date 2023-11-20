@@ -13,6 +13,7 @@ struct ArtistDetailView: View {
         LazyVStack(spacing: 8) {
           ForEach(viewStore.performances) { performance in
             PerformanceCard(performance: performance, isLoading: viewStore.isLoading)
+              .redacted(reason: viewStore.isLoading ? .placeholder : [])
           }
         }
         .padding(.horizontal, 16)
@@ -31,10 +32,10 @@ private struct ArtistHeader: View {
       AsyncImage(url: artist.imageUrl) { image in
         image
           .resizable()
-          .background(Color(white: 0.85))
+          .background(Color(white: 0.70))
       } placeholder: {
         Rectangle()
-          .fill(Color(white: 0.85))
+          .fill(Color(white: 0.70))
       }
       .aspectRatio(contentMode: .fill)
       .frame(maxWidth: .infinity)
@@ -65,9 +66,9 @@ private struct PerformanceCard: View {
       AsyncImage(url: performance.venue.imageUrl) { image in
         image
           .resizable()
-          .background(Color(white: 0.85))
+          .background(Color(white: 0.70))
       } placeholder: {
-        Rectangle().fill(Color(white: 0.85))
+        Rectangle().fill(Color(white: 0.70))
       }
       .aspectRatio(contentMode: .fill)
       .frame(width: 80)
@@ -91,11 +92,11 @@ private struct PerformanceCard: View {
     }
     .frame(maxWidth: .infinity)
     .background(Color(white: 0.99))
-    .cornerRadius(8, color: .init(white: 0.85))
+    .cornerRadius(8, color: .init(white: 0.70))
   }
 }
 
-#Preview("Load 10 sec then fail") {
+#Preview("Loading") {
   NavigationStack {
     ArtistDetailView(
       store: Store(
@@ -103,11 +104,11 @@ private struct PerformanceCard: View {
           id: 7,
           name: "Beat Illuminati",
           genre: "Dance",
-          imageUrl: URL(string: "https://songleap.s3.amazonaws.com/artists/Beat+Illuminati.png")!
+          imageUrl: nil
         )),
         reducer: ArtistDetailFeature.init,
         withDependencies: {
-          $0.repository = .waitThenFail()
+          $0.repository = .waitForever()
         }
       )
     )
@@ -122,9 +123,12 @@ private struct PerformanceCard: View {
           id: 7,
           name: "Beat Illuminati",
           genre: "Dance",
-          imageUrl: URL(string: "https://songleap.s3.amazonaws.com/artists/Beat+Illuminati.png")!
+          imageUrl: URL(string: "https://songleap.s3.amazonaws.com/artists/Beat+Illuminati.png")
         )),
-        reducer: ArtistDetailFeature.init
+        reducer: ArtistDetailFeature.init,
+        withDependencies: {
+          $0.repository = .liveValue
+        }
       )
     )
   }

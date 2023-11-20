@@ -18,6 +18,8 @@
 		9C3497E72AFD341C00C61F3C /* DecodableVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3497E62AFD341C00C61F3C /* DecodableVenue.swift */; };
 		9C3497EA2AFD7C6300C61F3C /* Date+Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3497E92AFD7C6300C61F3C /* Date+Performance.swift */; };
 		9C3497ED2AFD9AF500C61F3C /* CornerRadiusWithBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3497EC2AFD9AF500C61F3C /* CornerRadiusWithBorder.swift */; };
+		9C3497F02B0550C100C61F3C /* ArtistsListFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3497EF2B0550C100C61F3C /* ArtistsListFeatureTests.swift */; };
+		9C3497F22B05FB9A00C61F3C /* ArtistDetailFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3497F12B05FB9A00C61F3C /* ArtistDetailFeatureTests.swift */; };
 		9CC6EA1C2AF54D8000ACB183 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 9CC6EA1B2AF54D8000ACB183 /* ComposableArchitecture */; };
 		9CC6EA1E2AF5A23300ACB183 /* ArtistsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC6EA1D2AF5A23300ACB183 /* ArtistsListView.swift */; };
 		9CC6EA242AF5A76900ACB183 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC6EA232AF5A76900ACB183 /* Repository.swift */; };
@@ -27,7 +29,6 @@
 		9CE2CAB22AC3DC5500C91710 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE2CAB12AC3DC5500C91710 /* HomeView.swift */; };
 		9CE2CAB42AC3DC5800C91710 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CE2CAB32AC3DC5800C91710 /* Assets.xcassets */; };
 		9CE2CAB72AC3DC5800C91710 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CE2CAB62AC3DC5800C91710 /* Preview Assets.xcassets */; };
-		9CE2CAC12AC3DC5800C91710 /* EventFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE2CAC02AC3DC5800C91710 /* EventFinderTests.swift */; };
 		9CE2CACB2AC3DC5800C91710 /* EventFinderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE2CACA2AC3DC5800C91710 /* EventFinderUITests.swift */; };
 		9CE2CACD2AC3DC5800C91710 /* EventFinderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE2CACC2AC3DC5800C91710 /* EventFinderUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
@@ -62,6 +63,8 @@
 		9C3497E62AFD341C00C61F3C /* DecodableVenue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableVenue.swift; sourceTree = "<group>"; };
 		9C3497E92AFD7C6300C61F3C /* Date+Performance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Performance.swift"; sourceTree = "<group>"; };
 		9C3497EC2AFD9AF500C61F3C /* CornerRadiusWithBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRadiusWithBorder.swift; sourceTree = "<group>"; };
+		9C3497EF2B0550C100C61F3C /* ArtistsListFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsListFeatureTests.swift; sourceTree = "<group>"; };
+		9C3497F12B05FB9A00C61F3C /* ArtistDetailFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailFeatureTests.swift; sourceTree = "<group>"; };
 		9CC6EA1D2AF5A23300ACB183 /* ArtistsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsListView.swift; sourceTree = "<group>"; };
 		9CC6EA232AF5A76900ACB183 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		9CC6EA252AF5A7B400ACB183 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
@@ -71,7 +74,6 @@
 		9CE2CAB32AC3DC5800C91710 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9CE2CAB62AC3DC5800C91710 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9CE2CABC2AC3DC5800C91710 /* EventFinderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventFinderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CE2CAC02AC3DC5800C91710 /* EventFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFinderTests.swift; sourceTree = "<group>"; };
 		9CE2CAC62AC3DC5800C91710 /* EventFinderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventFinderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CE2CACA2AC3DC5800C91710 /* EventFinderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFinderUITests.swift; sourceTree = "<group>"; };
 		9CE2CACC2AC3DC5800C91710 /* EventFinderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFinderUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -145,6 +147,15 @@
 				9C3497EC2AFD9AF500C61F3C /* CornerRadiusWithBorder.swift */,
 			);
 			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		9C3497EE2B05509D00C61F3C /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				9C3497EF2B0550C100C61F3C /* ArtistsListFeatureTests.swift */,
+				9C3497F12B05FB9A00C61F3C /* ArtistDetailFeatureTests.swift */,
+			);
+			path = Features;
 			sourceTree = "<group>";
 		};
 		9CC6EA1F2AF5A71700ACB183 /* Features */ = {
@@ -233,7 +244,7 @@
 		9CE2CABF2AC3DC5800C91710 /* EventFinderTests */ = {
 			isa = PBXGroup;
 			children = (
-				9CE2CAC02AC3DC5800C91710 /* EventFinderTests.swift */,
+				9C3497EE2B05509D00C61F3C /* Features */,
 			);
 			path = EventFinderTests;
 			sourceTree = "<group>";
@@ -408,7 +419,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CE2CAC12AC3DC5800C91710 /* EventFinderTests.swift in Sources */,
+				9C3497F22B05FB9A00C61F3C /* ArtistDetailFeatureTests.swift in Sources */,
+				9C3497F02B0550C100C61F3C /* ArtistsListFeatureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
